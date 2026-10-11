@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burgeon World</title>
+    <title>Burgeon — Your World Grows With You</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main>
+
+    <div id="welcome-screen">
         <h1>Welcome to Your Burgeoning World</h1>
         <p>Your adventure begins here.</p>
-
         <button id="exploreButton">🌲✨ Enter the Forest ✨🌲</button>
-    </main>
+    </div>
+
+    <div id="forest-screen" class="hidden">
+        <div id="seed-counter">🌱 Seeds: <span id="seeds">100</span></div>
+
+        <div id="plant-area"></div>
+
+        <button id="shop-button">🛒 Shop</button>
+
+        <div id="shop-panel" class="hidden">
+            <button id="close-shop">✕</button>
+            <h2>🌿 Forest Shop</h2>
+            <p>Grow your world with seeds!</p>
+            <button id="buy-flower">🌸 Flower — 10 seeds</button>
+            <button id="buy-tree">🌳 Tree — 25 seeds</button>
+            <p id="shop-message"></p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
