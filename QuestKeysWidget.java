@@ -194,14 +194,18 @@ public class QuestKeysWidget {
             progressBar.setBorderPainted(false);
             progressBar.setBounds(110, 445, 180, 15);
 
+        addButton.setBounds(265, 378, 32, 32);
+        addButton.setFont(new Font("SansSerif", Font.BOLD, 20));
+
         addButton.addActionListener(e -> {
+            String name = JOptionPane.showInputDialog(
+                frame,
+                "What is your new quest?"
+            );
 
-            String taskName = taskInput.getText().trim();
-
-            if (!taskName.isEmpty()) {
-
+            if (name != null && !name.trim().isEmpty()) {
                 addQuest(
-                    taskName,
+                    name.trim(),
                     false,
                     taskList,
                     taskPanel,
@@ -209,24 +213,8 @@ public class QuestKeysWidget {
                     progressBar
                 );
 
-                taskInput.setText("");
                 saveQuests(taskList);
             }
-
-            addButton.setBounds(265, 378, 32, 32);
-            addButton.setFont(new Font("SansSerif", Font.BOLD, 20));
-
-            addButton.addActionListener(evt -> {
-                String name = JOptionPane.showInputDialog(
-                    frame,
-                    "What is your new quest?"
-                );
-
-                if (name != null && !name.trim().isEmpty()) {
-                    taskInput.setText(name.trim());
-                }
-            });
-
         });
 
             taskInput.addActionListener(event -> {
@@ -289,6 +277,17 @@ public class QuestKeysWidget {
 
         pointsLabel.setText("Seeds: " + points);
         progressBar.setValue(percentage);
+
+        try {
+            Path seedFile = Paths.get("seeds.json");
+            
+            Files.writeString(
+                seedFile,
+                "{\"earnedSeeds\": " + points + "}"
+            );
+        } catch (IOException e) {
+            System.out.println("Could not update seeds: " + e.getMessage());
+        }
 
         
     }

@@ -5,10 +5,35 @@ const seedDisplay = document.getElementById("seeds");
 const shopMessage = document.getElementById("shop-message");
 const plantArea = document.getElementById("plant-area");
 
-let seeds = 100;
+let earnedSeeds = 0;
+let spentSeeds = Number(localStorage.getItem("burgeonSpentSeeds")) || 0;
+let seeds = 0;
 let plantCount = 0;
 
-document.getElementById("exploreButton").onclick = function() {
+async function updateSeeds() {
+    try {
+        const response = await fetch("seeds.json", {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("Seed file unavailable");
+        }
+
+        const data = await response.json();
+
+        earnedSeeds = data.earnedSeeds;
+        seeds = Math.max(0, earnedSeeds - spentSeeds);
+        seedDisplay.textContent = seeds;
+    } catch (error) {
+        console.error("Could not load earned seeds:", error);
+    }
+}
+
+updateSeeds();
+
+document.getElementById("exploreButton").onclick = async function() {
+    await updateSeeds();
     welcomeScreen.classList.add("hidden");
     forestScreen.classList.remove("hidden");
 };
@@ -26,6 +51,9 @@ function buyPlant(type, cost, emoji) {
         shopMessage.textContent = "Not enough seeds! 🌱";
         return;
     }
+
+    spentSeeds += cost;
+    localStorage.setItem("burgeonSpentSeeds", spentSeeds);
 
     seeds -= cost;
     seedDisplay.textContent = seeds;
